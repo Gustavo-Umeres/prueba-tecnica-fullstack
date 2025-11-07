@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Planta {
+  id          Int          @id @default(autoincrement())
+  nombre      String
+  operaciones Operacion[]
+}
+
+model Operacion {
+  id               Int              @id @default(autoincrement())
+  nombre           String
+  plantaId         Int
+  planta           Planta           @relation(fields: [plantaId], references: [id])
+  costosIndirectos CostoIndirecto[]
+}
+
+model CostoIndirecto {
+  id          Int     @id @default(autoincrement())
+  rango       String
+  costo       Float
+  operacionId Int
+  operacion   Operacion @relation(fields: [operacionId], references: [id])
+}
