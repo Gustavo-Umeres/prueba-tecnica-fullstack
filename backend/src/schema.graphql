@@ -1,0 +1,40 @@
+type Planta {
+  id: ID!
+  nombre: String!
+  operaciones: [Operacion!]!
+}
+
+type Operacion {
+  id: ID!
+  nombre: String!
+  plantaId: ID!
+  costosIndirectos: [CostoIndirecto!]!
+}
+
+type CostoIndirecto {
+  id: ID!
+  rango: String!
+  costo: Float!
+}
+
+type Query {
+  plantas: [Planta!]!
+  operaciones(plantaId: ID!): [Operacion!]!
+}
+
+input CostoInput {
+  rango: String!
+  costo: Float!
+}
+
+input OperacionInput {
+  nombre: String!
+  plantaId: ID!
+  costosIndirectos: [CostoInput!]!
+}
+
+type Mutation {
+  crearOperacion(data: OperacionInput!): Operacion!
+  editarOperacion(id: ID!, data: OperacionInput!): Operacion!
+  eliminarOperacion(id: ID!): Boolean!
+}
