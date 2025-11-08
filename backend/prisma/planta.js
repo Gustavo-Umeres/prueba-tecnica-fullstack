@@ -71,7 +71,7 @@ async function main() {
     create: { nombre: "España" } 
   });
 
-  console.log("Seed completada");
+  console.log("Planta completada");
 }
 
 main()
