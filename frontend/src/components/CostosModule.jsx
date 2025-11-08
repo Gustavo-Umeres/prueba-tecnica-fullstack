@@ -14,14 +14,20 @@ const DragHandleIcon = () => (
   </svg>
 );
 
-const RANGOS_FIJOS = [
-  "300 kg", "500 kg", "1 T", "3 T", "5 T", "10 T", "20 T", "30 T",
-];
+const RANGOS_FIJOS = ["300 kg", "500 kg", "1 T", "3 T", "5 T", "10 T", "20 T", "30 T"];
+
 const DEFAULT_COSTOS_ROW = {
-  "300 kg": 15.0, "500 kg": 15.0, "1 T": 15.0, "3 T": 10.0,
-  "5 T": 8.0, "10 T": 7.0, "20 T": 5.0, "30 T": 4.8,
+  "300 kg": 15.0,
+  "500 kg": 15.0,
+  "1 T": 15.0,
+  "3 T": 10.0,
+  "5 T": 8.0,
+  "10 T": 7.0,
+  "20 T": 5.0,
+  "30 T": 4.8,
 };
-const MAX_EMPTY_ROWS = 11; 
+
+const MAX_EMPTY_ROWS = 11;
 
 export default function CostosModule({ loading, error, operaciones, selectedOperationId, onRowClick }) {
   if (loading) return <div>Cargando...</div>;
@@ -31,7 +37,7 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
   const emptyRowCount = Math.max(0, MAX_EMPTY_ROWS - dataRows.length);
 
   return (
-    <div className="overflow-hidden flex flex-col h-full"> 
+    <div className="overflow-hidden flex flex-col h-full">
       <div className="overflow-y-auto border border-gray-200 rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead>
@@ -40,7 +46,10 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                 Operación
               </th>
               {RANGOS_FIJOS.map((rango) => (
-                <th key={rango} className="p-3 text-center font-semibold whitespace-nowrap w-24 border-l border-gray-600">
+                <th
+                  key={rango}
+                  className="p-3 text-center **text-gray-700 font-semibold** border-l border-gray-200"
+                  >
                   {rango}
                 </th>
               ))}
@@ -54,14 +63,20 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                 <tr
                   key={op.id}
                   onClick={() => onRowClick(isSelected ? null : op.id)}
-                  className={`border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${isSelected ? "row-selected" : ""}`}
+                  className={`border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${
+                    isSelected ? "row-selected" : ""
+                  }`}
                 >
-                  <td className={`p-3 font-medium text-gray-900 sticky left-0 bg-white z-10 sticky-cell ${isSelected ? "row-selected" : "hover:bg-gray-50"}`}>
+                  <td
+                    className={`p-3 font-medium text-gray-900 sticky left-0 bg-white z-10 sticky-cell ${
+                      isSelected ? "row-selected" : "hover:bg-gray-50"
+                    }`}
+                  >
                     <DragHandleIcon />
                     {op.nombre}
                   </td>
                   {RANGOS_FIJOS.map((rango) => (
-                    <td key={rango} className="p-3 text-center text-gray-700 border-l border-gray-200">
+                    <td key={rango} className="p-3 text-center **text-gray-900 font-bold** border-l border-gray-200">
                       {costMap.has(rango)
                         ? costMap.get(rango).toFixed(costMap.get(rango) === 0.015 ? 3 : 2)
                         : "0.00"}
@@ -70,6 +85,7 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                 </tr>
               );
             })}
+
             {[...Array(emptyRowCount)].map((_, index) => (
               <tr key={`dummy-${index}`} className="border-b border-gray-200">
                 <td className="p-3 font-medium text-gray-400 sticky left-0 bg-white z-10">
@@ -77,7 +93,10 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                   ...
                 </td>
                 {RANGOS_FIJOS.map((rango) => (
-                  <td key={rango} className="p-3 text-center text-gray-400 border-l border-gray-200">
+                  <td
+                    key={rango}
+                    className="p-3 text-center **text-gray-600 font-semibold** border-l border-gray-200"
+                  >
                     {DEFAULT_COSTOS_ROW[rango].toFixed(DEFAULT_COSTOS_ROW[rango] === 0.015 ? 3 : 2)}
                   </td>
                 ))}
