@@ -1,33 +1,6 @@
-const DragHandleIcon = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="inline-block mr-3 text-gray-400 cursor-grab"
-  >
-    <path
-      fill="currentColor"
-      d="M5 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm5-10a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm0 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
-    />
-  </svg>
-);
-
-const RANGOS_FIJOS = ["300 kg", "500 kg", "1 T", "3 T", "5 T", "10 T", "20 T", "30 T"];
-
-const DEFAULT_COSTOS_ROW = {
-  "300 kg": 15.0,
-  "500 kg": 15.0,
-  "1 T": 15.0,
-  "3 T": 10.0,
-  "5 T": 8.0,
-  "10 T": 7.0,
-  "20 T": 5.0,
-  "30 T": 4.8,
-};
-
-const MAX_EMPTY_ROWS = 11;
+import React from 'react';
+import DragHandleIcon from './icons/DragHandleIcon';
+import { RANGOS_FIJOS, DEFAULT_COSTOS_ROW, MAX_EMPTY_ROWS } from '../constants/config';
 
 export default function CostosModule({ loading, error, operaciones, selectedOperationId, onRowClick }) {
   if (loading) return <div>Cargando...</div>;
@@ -48,8 +21,8 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
               {RANGOS_FIJOS.map((rango) => (
                 <th
                   key={rango}
-                  className="p-3 text-center **text-gray-700 font-semibold** border-l border-gray-200"
-                  >
+                  className="p-3 text-center font-semibold border-l border-gray-200"
+                >
                   {rango}
                 </th>
               ))}
@@ -76,7 +49,10 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                     {op.nombre}
                   </td>
                   {RANGOS_FIJOS.map((rango) => (
-                    <td key={rango} className="p-3 text-center **text-gray-900 font-bold** border-l border-gray-200">
+                    <td 
+                      key={rango} 
+                      className="p-3 text-center text-gray-900 font-semibold border-l border-gray-200"
+                    >
                       {costMap.has(rango)
                         ? costMap.get(rango).toFixed(costMap.get(rango) === 0.015 ? 3 : 2)
                         : "0.00"}
@@ -95,9 +71,9 @@ export default function CostosModule({ loading, error, operaciones, selectedOper
                 {RANGOS_FIJOS.map((rango) => (
                   <td
                     key={rango}
-                    className="p-3 text-center **text-gray-600 font-semibold** border-l border-gray-200"
+                    className="p-3 text-center text-gray-600 font-semibold border-l border-gray-200"
                   >
-                    {DEFAULT_COSTOS_ROW[rango].toFixed(DEFAULT_COSTOS_ROW[rango] === 0.015 ? 3 : 2)}
+                    {DEFAULT_COSTOS_ROW[rango] ? DEFAULT_COSTOS_ROW[rango].toFixed(DEFAULT_COSTOS_ROW[rango] === 0.015 ? 3 : 2) : "0.00"}
                   </td>
                 ))}
               </tr>

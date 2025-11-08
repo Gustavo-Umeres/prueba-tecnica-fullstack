@@ -1,46 +1,24 @@
-import { useState, useEffect } from "react";
-import { useMutation, gql } from "@apollo/client";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { CREATE_OPERACION, EDIT_OPERACION } from "../graphql/operations";
+import { RANGOS_FIJOS, getInitialFormState } from "../constants/config";
 
-const CREATE_OPERACION = gql`
-  mutation CrearOperacion($data: OperacionInput!) {
-    crearOperacion(data: $data) { id }
+const initializeState = (mode, operationData) => {
+  if (mode === "edit" && operationData) {
+    const costosMap = operationData.costosIndirectos.reduce((acc, costo) => {
+      acc[costo.rango] = costo.costo;
+      return acc;
+    }, {});
+    return { nombre: operationData.nombre, costos: costosMap };
   }
-`;
-
-const EDIT_OPERACION = gql`
-  mutation EditarOperacion($id: ID!, $data: OperacionInput!) {
-    editarOperacion(id: $id, data: $data) { id }
-  }
-`;
-
-const RANGOS_FIJOS = [
-  "300 kg", "500 kg", "1 T", "3 T", "5 T", "10 T", "20 T", "30 T",
-];
-
-const getInitialFormState = () => ({
-  nombre: "",
-  costos: RANGOS_FIJOS.reduce((acc, rango) => ({ ...acc, [rango]: 0.0 }), {}),
-});
+  return getInitialFormState();
+};
 
 export default function OperationModal({ isOpen, onClose, onSave, mode, operationData, plantaId }) {
   const [crearOperacion, { loading: creating }] = useMutation(CREATE_OPERACION);
   const [editarOperacion, { loading: editing }] = useMutation(EDIT_OPERACION);
 
-  const [formState, setFormState] = useState(getInitialFormState());
-
-  useEffect(() => {
-    if (isOpen) {
-      if (mode === "edit" && operationData) {
-        const costosMap = operationData.costosIndirectos.reduce((acc, costo) => {
-          acc[costo.rango] = costo.costo;
-          return acc;
-        }, {});
-        setFormState({ nombre: operationData.nombre, costos: costosMap });
-      } else {
-        setFormState(getInitialFormState());
-      }
-    }
-  }, [isOpen, mode, operationData]);
+  const [formState, setFormState] = useState(() => initializeState(mode, operationData));
 
   const handleChange = (field, value) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -74,7 +52,7 @@ export default function OperationModal({ isOpen, onClose, onSave, mode, operatio
       } else {
         await crearOperacion({ variables: { data: inputData } });
       }
-      onSave(); 
+      onSave();
     } catch (err) {
       console.error("Error guardando operación:", err);
       alert("Error al guardar: " + err.message);
@@ -119,7 +97,6 @@ export default function OperationModal({ isOpen, onClose, onSave, mode, operatio
             ))}
           </div>
           
-          {/* Botones del Modal */}
           <div className="flex justify-end gap-3">
             <button
               type="button"
