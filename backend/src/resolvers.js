@@ -28,7 +28,6 @@ export const resolvers = {
       });
     },
     editarOperacion: async (_, { id, data }) => {
-      // borramos costos y recreamos (estrategia simple y segura)
       await prisma.costoIndirecto.deleteMany({ where: { operacionId: Number(id) } });
       return prisma.operacion.update({
         where: { id: Number(id) },
