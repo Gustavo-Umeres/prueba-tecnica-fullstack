@@ -34,7 +34,6 @@ input OperacionInput {
 }
 
 type Mutation {
-  crearPlanta(data: PlantaInput!):Planta!
   crearOperacion(data: OperacionInput!): Operacion!
   eliminarOperacion(id: ID!): String!
   crearPlanta(data:PlantaInput!):Planta!
